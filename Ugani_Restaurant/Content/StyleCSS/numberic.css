@@ -1,0 +1,41 @@
+﻿.input-wrapper {
+    width: 70%;
+    height: 30px;
+    position: absolute;
+    display: flex;
+    left: 0px;
+    bottom: 5px;
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    appearance: none;
+    margin: 0;
+}
+
+input[type="number"] {
+    -moz-appearance: textfield;
+    padding: 10px;
+    text-align: center;
+}
+
+.input-wrapper * {
+    border: none;
+    width: 50px;
+    flex: 1;
+}
+
+.input-wrapper button {
+    cursor: pointer;
+}
+
+    .input-wrapper button:first-child {
+        border-radius: 50% 0 0 50%;
+        color: red;
+    }
+
+    .input-wrapper button:last-child {
+        border-radius: 0 50% 50% 0;
+        color: green;
+    }

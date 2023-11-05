@@ -1,0 +1,10 @@
+﻿
+@model IEnumerable<Ugani_Restaurant.Models.BANAN>
+
+@{
+    ViewBag.Title = "Dropdown List";
+}
+
+<div class="dropdown">
+    @Html.DropDownList("SelectedTable", new SelectList(Model, "MABAN", "MABAN"), "Chọn bàn", new { id = "tableDropdown", @class = "form-select w-100" })
+</div>

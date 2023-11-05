@@ -1,0 +1,27 @@
+﻿@model IEnumerable<Ugani_Restaurant.Models.LOAIKHONGGIAN>
+
+<div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+    <div class="bg-white py-2 collapse-inner rounded">
+        <h6 class="collapse-header">Loại món</h6>
+        @foreach (var l in Model)
+        {
+            <p id="@l.MALOAIKHONGGIAN" class="collapse-item dropdown_typeplace">@l.TENLOAIKHONGGIAN</p>
+        }
+    </div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+<script src="~/Scripts/jquery-3.4.1.js"></script>
+<script>
+    $(".dropdown_typeplace").click(function (e) {
+        var id = $(this).attr("id");
+        $.ajax({
+            type: 'GET',
+            url: '/Admin/BANANs/LoadBANANsById',
+            data: { CatId: id },
+            success: function (response) {
+                $("div.container-fluid").html(response);
+            }
+        })
+    })
+</script>
+

@@ -1,0 +1,54 @@
+﻿@model Ugani_Restaurant.Models.HOADON
+
+@{
+    ViewBag.Title = "DetailsBill";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div id="box-bill" class="rounded-3 w-75 border border-secondary-subtle m-auto p-5">
+        <h4 class="text-center">HÓA ĐƠN</h4>
+        <hr />
+        <div class="text-center">
+            @Html.DisplayNameFor(model => model.AspNetUser.FullName)
+            @Html.DisplayFor(model => model.AspNetUser.FullName)
+        </div>
+        <div class="text-center">
+            @Html.DisplayNameFor(model => model.NGAYLAPHD)
+            @Html.DisplayFor(model => model.NGAYLAPHD)
+        </div>
+        <p class="text-center fw-bold"> @ViewBag.CHITIETDATBANs.BANAN.LOAIKHONGGIAN.TENLOAIKHONGGIAN - @ViewBag.CHITIETDATBANs.BANAN.MABAN</p>
+        <table class="table" style="table-layout: fixed;">
+            <tr>
+                <th class="text-center">
+                    Tên món ăn
+                </th>
+                <th class="text-center">
+                    Đơn giá
+                </th>
+                <th class="text-center">
+                    Số lượng
+                </th>
+            </tr>
+            @foreach (var item in ViewBag.CHITIETDATMONs)
+            {
+                <tr>
+                    <td class="text-center">
+                        @item.MONAN.TENMONAN
+                    </td>
+                    <td class="text-center">
+                        @item.MONAN.DONGIA @item.MONAN.DVT
+                    </td>
+                    <td class="text-center">
+                        @item.SOLUONG
+                    </td>
+                </tr>
+
+            }
+        </table>
+        <div class="w-100 text-center">
+            @Html.DisplayNameFor(model => model.TONGTIEN)<br />
+            @Html.DisplayFor(model => model.TONGTIEN)
+        </div>
+    </div>
+</div>

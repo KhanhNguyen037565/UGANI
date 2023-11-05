@@ -1,0 +1,164 @@
+﻿@model IEnumerable<Ugani_Restaurant.Models.LOAIKHONGGIAN>
+@using Microsoft.AspNet.Identity
+@{
+    ViewBag.Title = "Booking";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@*flatpickr*@
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<link rel="stylesheet" type="text/css" href="https://npmcdn.com/flatpickr/dist/themes/material_blue.css">
+
+<link rel="stylesheet" href="~/Content/StyleCSS/main.css" />
+
+<div class="body-booking container d-flex flex-column gap-3 justify-content-center align-items-center">
+    <div class="d-flex flex-md-row mt-4 flex-column gap-3">
+        <div class="d-flex flex-row gap-3">
+            <label>Ngày đặt</label>
+            @Html.TextBox("datepicker", null, new { @id = "datepicker", type = "text" })
+        </div>
+        <div class="d-flex flex-row gap-3">
+            <label>Giờ đặt</label>
+            @Html.TextBox("startTime", null, new { @id = "startTime", type = "text" })
+        </div>
+        <div class="d-flex flex-row gap-3">
+            <label>Giờ trả</label>
+            @Html.TextBox("endTime", null, new { @id = "endTime", type = "text" })
+        </div>
+    </div>
+    <div class="list-btn w-100 d-flex flex-md-row  flex-column justify-content-center gap-2 align-items-center">
+        @foreach (var item in Model)
+        {
+            <div class="d-flex flex-column gap-2 w-100 h-100">
+                <button data-id="@item.MALOAIKHONGGIAN" class="btn-imgAreas rounded-3" style="background-image: url(/Content/khonggian/@item.IMG)"></button>
+                <p class="fs-6 fw-medium text-center w-100">@item.TENLOAIKHONGGIAN</p>
+            </div>
+        }
+    </div>
+    <div id="listTable"></div>
+    <div class="d-flex flex-column gap-1 w-100">
+        <label>Ghi chú</label>
+        @Html.TextArea("note", null, new { @id = "note", type = "text" })
+    </div>
+    <div class="d-flex flex-row gap-2">
+        <button class="btn btn-primary" id="submitBookingTable">Đặt bàn</button>
+        <button class="btn btn-primary" id="submitBookingFoods">Đặt món ăn</button>
+    </div>
+</div>
+
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<script>
+    $(document).ready(function () {
+        var id;
+        var date;
+        var startTime;
+        var endTime;
+        var table;
+        var note;
+
+        $(".btn-imgAreas").click(function () {
+            id = $(this).data('id');
+            date = $("#datepicker").val();
+            startTime = $("#startTime").val();
+            endTime = $("#endTime").val();
+            if (!date || !startTime || !endTime) {
+                alert("Mời bạn chọn ngày, thời gian đầy đủ trước khi không gian!");
+            }
+            else {
+                getTableById(id, date, startTime, endTime);
+            }
+        });
+
+        $("#submitBookingFoods").click(function () {
+            table = $("#tableDropdown").val();
+            note = $("#note").val();
+            $.ajax({
+                url: "/Home/SubmitBooking",
+                type: "POST",
+                data: {
+                    date: date,
+                    startTime: startTime,
+                    endTime: endTime,
+                    table: table,
+                    note: note
+                },
+                success: function (response) {
+                    window.location.href = "/Home/BookingFoods";
+                },
+                error: function () {
+                    alert("Đã xảy ra lỗi trong quá trình đạt bàn. Mời bạn quay lại sau ít phút!")
+                }
+            });
+        });
+
+        $("#submitBookingTable").click(function () {
+            table = $("#tableDropdown").val();
+            note = $("#note").val();
+            $.ajax({
+                url: "/Home/SubmitBooking",
+                type: "POST",
+                data: {
+                    date: date,
+                    startTime: startTime,
+                    endTime: endTime,
+                    table: table,
+                    note: note
+                },
+                success: function (response) {
+                    alert('Bạn đã đặt bàn thành công!')
+                },
+                error: function () {
+                    alert("Đã xảy ra lỗi trong quá trình đạt bàn. Mời bạn quay lại sau ít phút!")
+                }
+            });
+        });
+
+        function getTableById(idKG, date, startTime, endTime) {
+            $.ajax({
+                url: "/Home/GetTableById",
+                type: "GET",
+                data: {
+                    id: idKG,
+                    date: date,
+                    startTime: startTime,
+                    endTime: endTime
+                },
+                success: function (response) {
+                    // Cập nhật dữ liệu vào vùng hiển thị thông tin bàn
+                    $("#listTable").html(response);
+                }
+            });
+        }
+    });
+
+
+    flatpickr("#datepicker", {
+        enableTime: false,
+        dateFormat: "Y-m-d",
+        minDate: new Date().fp_incr(2),  // Đặt ngày tối thiểu là ngày hiện tại + 2 ngày
+        defaultDate: new Date().fp_incr(2), // Đặt giá trị mặc định là ngày hiện tại + 2 ngày
+    });
+
+    flatpickr("#startTime", {
+        enableTime: true, // Cho phép chọn giờ cho thẻ giờ bắt đầu
+        noCalendar: true, // Ẩn lịch
+        dateFormat: "H:i", // Định dạng giờ (tuỳ chỉnh)
+        minTime: "08:00",  // Giờ tối thiểu là 8:00 AM
+        maxTime: "20:00"   // Giờ tối đa là 8:00 PM
+    });
+
+    flatpickr("#endTime", {
+        enableTime: true, // Cho phép chọn giờ cho thẻ giờ kết thúc
+        noCalendar: true, // Ẩn lịch
+        dateFormat: "H:i", // Định dạng giờ (tuỳ chỉnh)
+        minTime: "09:00",  // Giờ tối thiểu là 8:00 AM
+        maxTime: "22:00"   // Giờ tối đa là 8:00 PM
+    });
+
+</script>
+
+
+
+
+

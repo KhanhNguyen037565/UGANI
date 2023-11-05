@@ -1,0 +1,151 @@
+﻿@model IEnumerable<Ugani_Restaurant.Models.MONAN>
+@using System.Collections.Generic;
+@using Ugani_Restaurant.Models
+
+@using Microsoft.AspNet.Identity
+@{
+    ViewBag.Title = "BookingFoods";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+<link rel="stylesheet" href="~/Content/StyleCSS/main.css" />
+<link rel="stylesheet" href="~/Content/StyleCSS/numberic.css" />
+<div class="container">
+    <div class="list-fooditem">
+        @foreach (var item in Model)
+        {
+            <div class="wrapper">
+                <div class="food-item">
+                    <div class="top" style="background-image: url('/Content/foodimages/@item.HINHANH'); background-repeat: no-repeat; background-position: center center;"></div>
+                    <div class="bottom">
+                        <div class="left">
+                            <div class="details">
+                                <div>
+                                    <h5 class="itemName">@item.TENMONAN</h5>
+                                    <p class="itemPrice">@item.DONGIA<span>@item.DVT</span></p>
+                                </div>
+                                <span class="input-wrapper">
+                                    <button class="decrement">-</button>
+                                    <input type="number" value="0" class="quantity" />
+                                    <button class="increment">+</button>
+                                </span>
+                            </div>
+                            <div class="buy" data-itemid="@item.MAMONAN" data-idkh=@User.Identity.GetUserId()>
+                                <span class="material-symbols-outlined">shopping_cart</span>
+                            </div>
+                        </div>
+                        <div class="right">
+                            <div class="done"><span class="material-symbols-outlined">check</span></div>
+                            <div class="details">
+
+                            </div>
+                            <div class="remove"><span class="material-symbols-outlined">close</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+
+    </div>
+    <div class="d-flex justify-content-center align-items-center">
+        <button class="btn btn-primary" id="submit-button">Đặt món</button>
+    </div>
+</div>
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<script>
+
+    var buyButtonClicked = false; // Biến kiểm tra xem đã nhấn nút "buy" chưa
+
+    $(document).on('click', '.buy', function () {
+        var quantityInput = $(this).siblings('.details').find('.quantity');
+        var quantityValue = parseInt(quantityInput.val());
+
+        if (quantityValue !== 0) {
+            $(this).closest('.bottom').addClass("clicked");
+            buyButtonClicked = true; // Đánh dấu rằng nút "buy" đã được nhấn và giá trị không phải là 0
+        } else {
+            // Nếu giá trị là 0, bạn có thể hiển thị thông báo hoặc thực hiện hành động khác tùy ý
+            alert("Vui lòng chọn số lượng món trước khi nhấn lựa chọn!");
+        }
+    });
+
+    $(document).on('click', '.remove', function () {
+        $(this).closest('.bottom').removeClass("clicked");
+        buyButtonClicked = false; // Đánh dấu rằng nút "buy" đã bị hủy bỏ
+    });
+
+    var selectedItems = [];
+
+    $(document).on('click', '.buy', function () {
+        var idKH = $(this).data("idkh"); // Lấy id Khách hàng
+        var itemID = parseInt($(this).data("itemid")); // Lấy ID món ăn từ dữ liệu HTML hoặc thuộc tính khác
+        var itemName = $(this).siblings('.details').find('.itemName').text(); // Lấy tên món ăn
+        var itemPrice = parseFloat($(this).siblings('.details').find('.itemPrice').text()); // Lấy giá món ăn
+        var itemNumber = parseInt($(this).siblings('.details').find('.quantity').val()); // Lấy số lượng món muốn đặt
+        var date = new Date();
+
+        var itemDetail = {
+            makh: idKH,
+            mamonan: itemID,
+            tenmonan: itemName,
+            dongia: itemPrice,
+            soluong: itemNumber,
+            ngaydat: date.toUTCString()
+        };
+        selectedItems.push(itemDetail);
+        
+    });
+
+    // Bắt sự kiện khi nút "submit-button" được nhấn
+    $('#submit-button').click(function () {
+        if (buyButtonClicked) {
+            // Nếu đã nhấn nút "buy," thực hiện công việc
+            $.ajax({
+                url: '/Home/SubmitBookingFoods',
+                method: 'POST',
+                data: { selectedItems: selectedItems },
+                success: function (response) {
+                    window.location.href = "/Home/ShowBill";
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+        } else {
+            // Nếu chưa nhấn nút "buy," bạn có thể hiển thị thông báo hoặc thực hiện hành động khác tùy ý
+            alert("Vui lòng chọn món trước khi đặt món!");
+        }
+    });
+
+    // Lấy tất cả các trường nhập số và nút tăng/giảm
+    const quantityInputs = document.querySelectorAll(".quantity");
+    const incrementButtons = document.querySelectorAll(".increment");
+    const decrementButtons = document.querySelectorAll(".decrement");
+
+    // Hàm tăng giảm
+    function handleIncrement(event) {
+        const input = event.target.parentNode.querySelector(".quantity");
+        input.value = parseInt(input.value) + 1;
+    }
+
+    function handleDecrement(event) {
+        const input = event.target.parentNode.querySelector(".quantity");
+        input.value = parseInt(input.value) - 1;
+    }
+
+    // Thêm sự kiện cho nút tăng và nút giảm
+    incrementButtons.forEach(button => {
+        button.addEventListener("click", handleIncrement);
+    });
+
+    decrementButtons.forEach(button => {
+        button.addEventListener("click", handleDecrement);
+    });
+</script>
+
+
+
+
+
+

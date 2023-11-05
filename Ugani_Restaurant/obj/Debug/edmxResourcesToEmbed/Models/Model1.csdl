@@ -1,0 +1,343 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="UGANI_1Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="C__MigrationHistory">
+    <Key>
+      <PropertyRef Name="MigrationId" />
+      <PropertyRef Name="ContextKey" />
+    </Key>
+    <Property Name="MigrationId" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="ContextKey" Type="String" MaxLength="300" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Model" Type="Binary" MaxLength="Max" FixedLength="false" Nullable="false" />
+    <Property Name="ProductVersion" Type="String" MaxLength="32" FixedLength="false" Unicode="true" Nullable="false" />
+  </EntityType>
+  <EntityType Name="AspNetRole">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Name" Type="String" MaxLength="256" FixedLength="false" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="AspNetUsers" Relationship="Self.AspNetUserRoles" FromRole="AspNetRoles" ToRole="AspNetUsers" />
+  </EntityType>
+  <EntityType Name="AspNetUserClaim">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="UserId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="ClaimType" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="ClaimValue" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="AspNetUser" Relationship="Self.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" FromRole="AspNetUserClaims" ToRole="AspNetUsers" />
+  </EntityType>
+  <EntityType Name="AspNetUserLogin">
+    <Key>
+      <PropertyRef Name="LoginProvider" />
+      <PropertyRef Name="ProviderKey" />
+      <PropertyRef Name="UserId" />
+    </Key>
+    <Property Name="LoginProvider" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="ProviderKey" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="UserId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="AspNetUser" Relationship="Self.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" FromRole="AspNetUserLogins" ToRole="AspNetUsers" />
+  </EntityType>
+  <EntityType Name="AspNetUser">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="UserName" Type="String" MaxLength="256" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Email" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+    <Property Name="EmailConfirmed" Type="Boolean" Nullable="false" />
+    <Property Name="PasswordHash" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="SecurityStamp" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="PhoneNumber" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="PhoneNumberConfirmed" Type="Boolean" Nullable="false" />
+    <Property Name="TwoFactorEnabled" Type="Boolean" Nullable="false" />
+    <Property Name="LockoutEndDateUtc" Type="DateTime" Precision="3" />
+    <Property Name="LockoutEnabled" Type="Boolean" Nullable="false" />
+    <Property Name="AccessFailedCount" Type="Int32" Nullable="false" />
+    <Property Name="FullName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="AspNetUserClaims" Relationship="Self.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" FromRole="AspNetUsers" ToRole="AspNetUserClaims" />
+    <NavigationProperty Name="AspNetUserLogins" Relationship="Self.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" FromRole="AspNetUsers" ToRole="AspNetUserLogins" />
+    <NavigationProperty Name="AspNetRoles" Relationship="Self.AspNetUserRoles" FromRole="AspNetUsers" ToRole="AspNetRoles" />
+    <NavigationProperty Name="HOADONs" Relationship="UGANI_1Model.RBTV_PF1_HOADON" FromRole="AspNetUser" ToRole="HOADON" />
+  </EntityType>
+  <EntityType Name="sysdiagram">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="principal_id" Type="Int32" Nullable="false" />
+    <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="version" Type="Int32" />
+    <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+  </EntityType>
+  <Association Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
+    <End Role="AspNetUsers" Type="Self.AspNetUser" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="AspNetUserClaims" Type="Self.AspNetUserClaim" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AspNetUsers">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="AspNetUserClaims">
+        <PropertyRef Name="UserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId">
+    <End Role="AspNetUsers" Type="Self.AspNetUser" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="AspNetUserLogins" Type="Self.AspNetUserLogin" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AspNetUsers">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="AspNetUserLogins">
+        <PropertyRef Name="UserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="AspNetUserRoles">
+    <End Role="AspNetRoles" Type="Self.AspNetRole" Multiplicity="*" />
+    <End Role="AspNetUsers" Type="Self.AspNetUser" Multiplicity="*" />
+  </Association>
+  <EntityContainer Name="UGANI_1Entities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="C__MigrationHistory" EntityType="Self.C__MigrationHistory" />
+    <EntitySet Name="AspNetRoles" EntityType="Self.AspNetRole" />
+    <EntitySet Name="AspNetUserClaims" EntityType="Self.AspNetUserClaim" />
+    <EntitySet Name="AspNetUserLogins" EntityType="Self.AspNetUserLogin" />
+    <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUser" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagram" />
+    <AssociationSet Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
+      <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+      <End Role="AspNetUserClaims" EntitySet="AspNetUserClaims" />
+    </AssociationSet>
+    <AssociationSet Name="FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId">
+      <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+      <End Role="AspNetUserLogins" EntitySet="AspNetUserLogins" />
+    </AssociationSet>
+    <AssociationSet Name="AspNetUserRoles" Association="Self.AspNetUserRoles">
+      <End Role="AspNetRoles" EntitySet="AspNetRoles" />
+      <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+    </AssociationSet>
+    <EntitySet Name="BANANs" EntityType="UGANI_1Model.BANAN" />
+    <EntitySet Name="CHITIETDATBANs" EntityType="UGANI_1Model.CHITIETDATBAN" />
+    <EntitySet Name="CHITIETDATMONANs" EntityType="UGANI_1Model.CHITIETDATMONAN" />
+    <EntitySet Name="HOADONs" EntityType="UGANI_1Model.HOADON" />
+    <EntitySet Name="LOAIKHONGGIANs" EntityType="UGANI_1Model.LOAIKHONGGIAN" />
+    <EntitySet Name="LOAIMONs" EntityType="UGANI_1Model.LOAIMON" />
+    <EntitySet Name="MONANs" EntityType="UGANI_1Model.MONAN" />
+    <AssociationSet Name="RBTV_PF1_HOADON" Association="UGANI_1Model.RBTV_PF1_HOADON">
+      <End Role="AspNetUser" EntitySet="AspNetUsers" />
+      <End Role="HOADON" EntitySet="HOADONs" />
+    </AssociationSet>
+    <AssociationSet Name="RBTV_PF_BANAN" Association="UGANI_1Model.RBTV_PF_BANAN">
+      <End Role="LOAIKHONGGIAN" EntitySet="LOAIKHONGGIANs" />
+      <End Role="BANAN" EntitySet="BANANs" />
+    </AssociationSet>
+    <AssociationSet Name="RBTV_PF2_DANHSACHBAN" Association="UGANI_1Model.RBTV_PF2_DANHSACHBAN">
+      <End Role="BANAN" EntitySet="BANANs" />
+      <End Role="CHITIETDATBAN" EntitySet="CHITIETDATBANs" />
+    </AssociationSet>
+    <AssociationSet Name="FK_CHITIETDATBAN_HOADON" Association="UGANI_1Model.FK_CHITIETDATBAN_HOADON">
+      <End Role="HOADON" EntitySet="HOADONs" />
+      <End Role="CHITIETDATBAN" EntitySet="CHITIETDATBANs" />
+    </AssociationSet>
+    <AssociationSet Name="RBTV_PF_1_DANHSACHMONAN" Association="UGANI_1Model.RBTV_PF_1_DANHSACHMONAN">
+      <End Role="HOADON" EntitySet="HOADONs" />
+      <End Role="CHITIETDATMONAN" EntitySet="CHITIETDATMONANs" />
+    </AssociationSet>
+    <AssociationSet Name="RBTV_PF2_DANHSACHMONAN" Association="UGANI_1Model.RBTV_PF2_DANHSACHMONAN">
+      <End Role="MONAN" EntitySet="MONANs" />
+      <End Role="CHITIETDATMONAN" EntitySet="CHITIETDATMONANs" />
+    </AssociationSet>
+    <AssociationSet Name="RBTV1_PF_MONAN" Association="UGANI_1Model.RBTV1_PF_MONAN">
+      <End Role="LOAIMON" EntitySet="LOAIMONs" />
+      <End Role="MONAN" EntitySet="MONANs" />
+    </AssociationSet>
+    <FunctionImport Name="ListYear" ReturnType="Collection(Int32)" />
+    <FunctionImport Name="ThongKeTongTienTheoThangNamVaTinhTrang" ReturnType="Collection(Decimal)">
+      <Parameter Name="Thang" Mode="In" Type="Int32" />
+      <Parameter Name="Nam" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="ThongKe">
+      <Parameter Name="Thang" Mode="In" Type="Int32" />
+      <Parameter Name="Nam" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="Report" ReturnType="Collection(UGANI_1Model.Report_Result)">
+      <Parameter Name="Thang" Mode="In" Type="Int32" />
+      <Parameter Name="Nam" Mode="In" Type="Int32" />
+    </FunctionImport>
+  </EntityContainer>
+  <EntityType Name="BANAN">
+    <Key>
+      <PropertyRef Name="MABAN" />
+    </Key>
+    <Property Name="MABAN" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="false" />
+    <Property Name="MAKHONGGIAN" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="LOAIKHONGGIAN" Relationship="UGANI_1Model.RBTV_PF_BANAN" FromRole="BANAN" ToRole="LOAIKHONGGIAN" />
+    <NavigationProperty Name="CHITIETDATBANs" Relationship="UGANI_1Model.RBTV_PF2_DANHSACHBAN" FromRole="BANAN" ToRole="CHITIETDATBAN" />
+  </EntityType>
+  <EntityType Name="CHITIETDATBAN">
+    <Key>
+      <PropertyRef Name="STT" />
+    </Key>
+    <Property Name="STT" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="MAHD" Type="Int32" Nullable="false" />
+    <Property Name="MABAN" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="false" />
+    <Property Name="NGAYDAT" Type="DateTime" Precision="0" />
+    <Property Name="GIODATBAN" Type="DateTime" Precision="3" />
+    <Property Name="GIOTRABAN" Type="DateTime" Precision="3" />
+    <Property Name="GHICHU" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="BANAN" Relationship="UGANI_1Model.RBTV_PF2_DANHSACHBAN" FromRole="CHITIETDATBAN" ToRole="BANAN" />
+    <NavigationProperty Name="HOADON" Relationship="UGANI_1Model.FK_CHITIETDATBAN_HOADON" FromRole="CHITIETDATBAN" ToRole="HOADON" />
+  </EntityType>
+  <EntityType Name="CHITIETDATMONAN">
+    <Key>
+      <PropertyRef Name="STT" />
+    </Key>
+    <Property Name="STT" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="MAHD" Type="Int32" Nullable="false" />
+    <Property Name="MAMONAN" Type="Int32" Nullable="false" />
+    <Property Name="SOLUONG" Type="Int32" />
+    <Property Name="NGAYDAT" Type="DateTime" Precision="0" />
+    <NavigationProperty Name="HOADON" Relationship="UGANI_1Model.RBTV_PF_1_DANHSACHMONAN" FromRole="CHITIETDATMONAN" ToRole="HOADON" />
+    <NavigationProperty Name="MONAN" Relationship="UGANI_1Model.RBTV_PF2_DANHSACHMONAN" FromRole="CHITIETDATMONAN" ToRole="MONAN" />
+  </EntityType>
+  <EntityType Name="HOADON">
+    <Key>
+      <PropertyRef Name="MAHD" />
+    </Key>
+    <Property Name="MAHD" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="MAKH" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="TONGTIEN" Type="Decimal" Precision="18" Scale="0" />
+    <Property Name="TINHTRANG" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="NGAYLAPHD" Type="DateTime" Precision="3" />
+    <NavigationProperty Name="AspNetUser" Relationship="UGANI_1Model.RBTV_PF1_HOADON" FromRole="HOADON" ToRole="AspNetUser" />
+    <NavigationProperty Name="CHITIETDATBANs" Relationship="UGANI_1Model.FK_CHITIETDATBAN_HOADON" FromRole="HOADON" ToRole="CHITIETDATBAN" />
+    <NavigationProperty Name="CHITIETDATMONANs" Relationship="UGANI_1Model.RBTV_PF_1_DANHSACHMONAN" FromRole="HOADON" ToRole="CHITIETDATMONAN" />
+  </EntityType>
+  <EntityType Name="LOAIKHONGGIAN">
+    <Key>
+      <PropertyRef Name="MALOAIKHONGGIAN" />
+    </Key>
+    <Property Name="MALOAIKHONGGIAN" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TENLOAIKHONGGIAN" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="IMG" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="MOTA" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+    <Property Name="DONGIA" Type="Decimal" Precision="18" Scale="0" />
+    <Property Name="DVT" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="BANANs" Relationship="UGANI_1Model.RBTV_PF_BANAN" FromRole="LOAIKHONGGIAN" ToRole="BANAN" />
+  </EntityType>
+  <EntityType Name="LOAIMON">
+    <Key>
+      <PropertyRef Name="MALOAIMON" />
+    </Key>
+    <Property Name="MALOAIMON" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TENLOAIMON" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="MONANs" Relationship="UGANI_1Model.RBTV1_PF_MONAN" FromRole="LOAIMON" ToRole="MONAN" />
+  </EntityType>
+  <EntityType Name="MONAN">
+    <Key>
+      <PropertyRef Name="MAMONAN" />
+    </Key>
+    <Property Name="MAMONAN" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="MALOAIMON" Type="Int32" Nullable="false" />
+    <Property Name="TENMONAN" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="HINHANH" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="DONGIA" Type="Decimal" Precision="18" Scale="0" />
+    <Property Name="DVT" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="CHITIETDATMONANs" Relationship="UGANI_1Model.RBTV_PF2_DANHSACHMONAN" FromRole="MONAN" ToRole="CHITIETDATMONAN" />
+    <NavigationProperty Name="LOAIMON" Relationship="UGANI_1Model.RBTV1_PF_MONAN" FromRole="MONAN" ToRole="LOAIMON" />
+  </EntityType>
+  <Association Name="RBTV_PF1_HOADON">
+    <End Type="UGANI_1Model.AspNetUser" Role="AspNetUser" Multiplicity="1" />
+    <End Type="UGANI_1Model.HOADON" Role="HOADON" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AspNetUser">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="HOADON">
+        <PropertyRef Name="MAKH" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="RBTV_PF_BANAN">
+    <End Type="UGANI_1Model.LOAIKHONGGIAN" Role="LOAIKHONGGIAN" Multiplicity="1" />
+    <End Type="UGANI_1Model.BANAN" Role="BANAN" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="LOAIKHONGGIAN">
+        <PropertyRef Name="MALOAIKHONGGIAN" />
+      </Principal>
+      <Dependent Role="BANAN">
+        <PropertyRef Name="MAKHONGGIAN" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="RBTV_PF2_DANHSACHBAN">
+    <End Type="UGANI_1Model.BANAN" Role="BANAN" Multiplicity="1" />
+    <End Type="UGANI_1Model.CHITIETDATBAN" Role="CHITIETDATBAN" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="BANAN">
+        <PropertyRef Name="MABAN" />
+      </Principal>
+      <Dependent Role="CHITIETDATBAN">
+        <PropertyRef Name="MABAN" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_CHITIETDATBAN_HOADON">
+    <End Type="UGANI_1Model.HOADON" Role="HOADON" Multiplicity="1" />
+    <End Type="UGANI_1Model.CHITIETDATBAN" Role="CHITIETDATBAN" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="HOADON">
+        <PropertyRef Name="MAHD" />
+      </Principal>
+      <Dependent Role="CHITIETDATBAN">
+        <PropertyRef Name="MAHD" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="RBTV_PF_1_DANHSACHMONAN">
+    <End Type="UGANI_1Model.HOADON" Role="HOADON" Multiplicity="1" />
+    <End Type="UGANI_1Model.CHITIETDATMONAN" Role="CHITIETDATMONAN" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="HOADON">
+        <PropertyRef Name="MAHD" />
+      </Principal>
+      <Dependent Role="CHITIETDATMONAN">
+        <PropertyRef Name="MAHD" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="RBTV_PF2_DANHSACHMONAN">
+    <End Type="UGANI_1Model.MONAN" Role="MONAN" Multiplicity="1" />
+    <End Type="UGANI_1Model.CHITIETDATMONAN" Role="CHITIETDATMONAN" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="MONAN">
+        <PropertyRef Name="MAMONAN" />
+      </Principal>
+      <Dependent Role="CHITIETDATMONAN">
+        <PropertyRef Name="MAMONAN" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="RBTV1_PF_MONAN">
+    <End Type="UGANI_1Model.LOAIMON" Role="LOAIMON" Multiplicity="1" />
+    <End Type="UGANI_1Model.MONAN" Role="MONAN" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="LOAIMON">
+        <PropertyRef Name="MALOAIMON" />
+      </Principal>
+      <Dependent Role="MONAN">
+        <PropertyRef Name="MALOAIMON" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <ComplexType Name="Report_Result">
+    <Property Type="DateTime" Name="NgayLapHD" Nullable="true" />
+    <Property Type="Decimal" Name="TongTien" Nullable="true" Precision="38" Scale="0" />
+  </ComplexType>
+</Schema>

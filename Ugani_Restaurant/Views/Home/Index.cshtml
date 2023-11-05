@@ -1,0 +1,87 @@
+﻿@{
+    ViewBag.Title = "Trang chủ";
+}
+
+@Styles.Render("~/Content/bootstrap.min.css")
+@Styles.Render("~/Content/bootstrap.css")
+@Styles.Render("~/Content/StyleCSS/main.css")
+@Scripts.Render("~/Script/bootstrap.bundle.min.js")
+@Scripts.Render("~/Script/bootstrap.min.js")
+
+<div class="home">
+    <div class="row row-one">
+        <div class="col-6 col-logo">
+            <img src="~/Content/photoHome/Ugani.png" />
+        </div>
+        <div class="col-6 col-img-1">
+
+        </div>
+    </div>
+    <div class="row row-second">
+        <div class="col-6 box-img-2">
+            <div class="img">
+                <img src="~/Content/photoHome/How to Price Food to Sell Online.png" />
+            </div>
+        </div>
+        <div class="col-6 box-content">
+            <div class="content">
+                <h3>
+                    Chẳng cần đi xa<br />
+                    ​Món ăn ngay "nhà"
+                </h3>
+                <p>
+                    Ugani Restaurant toạ lạc tại trung tâm Sài Gòn - ngôi nhà của hàng triệu người. Ở Ugani, nơi nguyên liệu được nhập khẩu và chọn lọc duới bàn tay của đầu bếp giàu kinh nghiệm, món ăn của chúng tôi không đơn giản chỉ là Steak hay mì Ý mà còn là những lựa chọn tuyệt vời đến từ những miền Ẩm thực của thế giới.
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="row row-three">
+        <div class="col-6 box-content">
+            <div class="content">
+                <h3>
+                    Ưu đãi ngập tràn
+                </h3>
+                <ul>
+                    <li>Từ nay đến hết 10.7.22 giảm ngay 10% cho toàn bộ menu gọi món (à la carte) khi check in tại nhà hàng (Facebook / Instagram hoặc Tiktok)</li>
+
+                    <li>Thử ngay món mới - bò Wellington trứ danh với chỉ 385.000.</li>
+
+                    <li>FREE Trang trí tiệc tặng khách: Parsley đã , đang và sẽ luôn hỗ trợ khách hết mình trang trí tiệc cơ bản miễn phí khi book bàn trước - KHÔNG ĐIỀU KIỆN , KHÔNG ĐẶT CỌC. Chỉ cần thưởng thức, chuyện còn lại cứ để Parsley lo!</li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-6 box-img-3">
+            <div class="img">
+                <img src="~/Content/photoHome/Roasted Garlic Pasta with Tomatoes and Spinach.jpg" />
+            </div>
+        </div>
+    </div>
+    <div class="row row-four">
+        <div class="col-6 box-content">
+            <div class="content">
+                <h3>
+                    GIỜ MỞ CỬA
+                </h3>
+                <ul>
+                    <li class="date">MON-FRI</li>
+                    <li class="time">8:00 AM - 11:00 AM</li>
+                    <li class="time">2:00 PM - 10:00 PM</li>
+                    <li class="date">SAT-SUN</li>
+                    <li class="time">8:00 AM - 10:00 PM</li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-6 box-img-3">
+            <div class="img">
+                <img src="~/Content/photoHome/A Guide to the Best Thai Restaurants in Denmark.jpg" />
+            </div>
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/dialogflow-console/fast/messenger/bootstrap.js?v=1"></script>
+    <df-messenger intent="WELCOME"
+                  chat-title="CHATBOT_AI"
+                  agent-id="b0d3f053-59ad-4f98-a6d6-b3493faa24aa"
+                  language-code="en"></df-messenger>
+    
+</div>

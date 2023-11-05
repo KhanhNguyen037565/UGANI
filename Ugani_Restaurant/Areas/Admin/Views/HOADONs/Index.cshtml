@@ -1,0 +1,110 @@
+﻿@model IEnumerable<Ugani_Restaurant.Models.HOADON>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-auto">
+    <h3 class="text-center mt-3">DANH SÁCH ĐƠN HÀNG</h3>
+    <table class="table">
+        <tr>
+            <th class="text-center">
+                STT
+            </th>
+            <th class="text-center">
+                @Html.DisplayNameFor(model => model.AspNetUser.FullName)
+            </th>
+            <th class="text-center">
+                @Html.DisplayNameFor(model => model.NGAYLAPHD)
+            </th>
+            <th class="text-center">
+                @Html.DisplayNameFor(model => model.TONGTIEN)
+            </th>
+            <th class="text-center">
+                @Html.DisplayNameFor(model => model.TINHTRANG)
+            </th>
+
+            <th></th>
+        </tr>
+
+        @{
+            int i = 0;
+            foreach (var item in Model)
+            {
+                <tr>
+                    <th class="text-center">
+                        @i
+                    </th>
+                    <td class="text-center">
+                        @Html.DisplayFor(modelItem => item.AspNetUser.FullName)
+                    </td>
+                    <td class="text-center">
+                        @Html.DisplayFor(modelItem => item.NGAYLAPHD)
+                    </td>
+                    <td class="text-center">
+                        @Html.DisplayFor(modelItem => item.TONGTIEN)
+                    </td>
+                    <td class="text-center">
+                        @Html.DisplayFor(modelItem => item.TINHTRANG)
+                    </td>
+                    <td class="text-center">
+                        @Html.ActionLink("Chi tiết", "Details", new { id = item.MAHD }, new { @class = "btn btn-primary" }) |
+                        @Html.ActionLink("Xác nhận", "Confirm", new { id = item.MAHD }, new { @class = "btn btn-danger btn-confirm", @data_toggle = "modal", @data_target = "#modalConfirm", @data_id = item.MAHD })
+                    </td>
+                </tr>
+                i++;
+            }
+
+        }
+    </table>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="modalConfirm" tabindex="-1" aria-labelledby="modalConfirmLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="modalConfirmLabel">Xác nhận</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="modalConfirmContent">
+                ...
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Quay lại</button>
+                <button type="button" class="btn btn-primary" id="btn-confirm-submit">Xác nhận</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+<script>
+    $(function () {
+        var id = '';
+        $('.btn-confirm').click(function (e) {
+            e.preventDefault();
+            id = $(this).data('id');
+            var url = $(this).attr('href');
+            $.post(url, { id: id }, function (data) {
+                $('#modalConfirmContent').html(data);
+                $('#modalConfirm').modal('show');
+            });
+        });
+
+        // Gọi hàm xử lý sự kiện click từ button khác
+        $('#btn-confirm-submit').click(function (e) {
+            $.ajax({
+                type: 'GET',
+                url: '/Admin/HOADONs/ConfirmSubmit',
+                data: { CatId: id },
+                success: function (response) {
+                    window.location.reload();
+                }
+            });
+        });
+    });
+
+
+</script>

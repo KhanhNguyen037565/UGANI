@@ -1,0 +1,45 @@
+﻿@model Ugani_Restaurant.Models.CreateViewModel
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+@using (Html.BeginForm("Create", "AccountAdmin", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+    <h2>Đăng ký</h2>
+    @Html.AntiForgeryToken()
+<div class="form-group">
+    @Html.LabelFor(m => m.FullName, new { @class = "col-md-2 control-label" })
+    @Html.TextBoxFor(m => m.FullName, new { @class = "form-control" })
+    @Html.ValidationMessageFor(model => model.FullName, "", new { @class = "text-danger" })
+</div>
+<div class="form-group">
+    @Html.LabelFor(m => m.PhoneNumber, new { @class = "col-md-2 control-label" })
+    @Html.TextBoxFor(m => m.PhoneNumber, new { @class = "form-control" })
+    @Html.ValidationMessageFor(model => model.PhoneNumber, "", new { @class = "text-danger" })
+</div>
+<div class="form-group">
+    @Html.LabelFor(m => m.Email, new { @class = "control-label" })
+    @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+    @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+</div>
+<div class="form-group">
+    @Html.LabelFor(m => m.Role, new { @class = "control-label" })
+    @Html.DropDownListFor(m => m.Role, ViewBag.Role as SelectList, "Chon quyen", new { @class = "form-control" })
+    @Html.ValidationMessageFor(model => model.Role, "", new { @class = "text-danger" })
+</div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Password, new { @class = "control-label" })
+        @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.ConfirmPassword, new { @class = "control-label" })
+        @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.ConfirmPassword, "", new { @class = "text-danger" })
+    </div>
+    <div class="form-group">
+        <input type="submit" class="btnRegister btn btn-primary" value="Đăng ký" />
+    </div>
+}
+

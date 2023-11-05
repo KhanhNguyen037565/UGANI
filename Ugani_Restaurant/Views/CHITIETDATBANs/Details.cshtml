@@ -1,0 +1,67 @@
+﻿@model Ugani_Restaurant.Models.CHITIETDATBAN
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>CHITIETDATBAN</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.NGAYDAT)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.NGAYDAT)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.GIODATBAN)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.GIODATBAN)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.GIOTRABAN)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.GIOTRABAN)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.GHICHU)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.GHICHU)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.AspNetUser.UserName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.AspNetUser.UserName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.BANAN.MABAN)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.BANAN.MABAN)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.STT }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

@@ -1,0 +1,113 @@
+﻿@model IEnumerable<Ugani_Restaurant.Models.BANAN>
+@{
+    var user = User.Identity.Name;
+    var isAdmin = User.IsInRole("Admin");
+
+
+}
+@if (isAdmin)
+{
+    <p>
+        @Html.ActionLink("Create New", "Create")
+    </p>
+}
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.MABAN)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.LOAIKHONGGIAN.TENLOAIKHONGGIAN)
+        </th>
+        @if (isAdmin)
+        {
+            <td>Tác vụ</td>
+        }
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.MABAN)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LOAIKHONGGIAN.TENLOAIKHONGGIAN)
+            </td>
+            @if (isAdmin)
+            {
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.MABAN.Trim() }, new { @class = "btn btn-primary" }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.MABAN.Trim() }, new { @class = "btn btn-danger btn-delete", @data_toggle = "modal", @data_target = "#modalDelete", @data_id = item.MABAN.Trim() })
+                </td>
+            }
+
+        </tr>
+    }
+
+</table>
+
+<!-- Modal -->
+<div class="modal fade" id="modalDelete" tabindex="-1" aria-labelledby="modalDeleteLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="modalDeleteLabel">Delete</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="modalDeleteContent">
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Quay lại</button>
+                <button type="button" class="btn btn-primary" id="btn-delete-submit">Xóa</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+<script>
+    $(function () {
+        var id = '';
+        $('.btn-delete').click(function (e) {
+            e.preventDefault();
+            id = $(this).data('id');
+            makg = $(this).data('makg');
+            var url = $(this).attr('href');
+            $.post(url, { id: id }, function (data) {
+                $('#modalDeleteContent').html(data);
+                $('#modalDelete').modal('show');
+            });
+        });
+
+        // Gọi hàm xử lý sự kiện click từ button khác
+        $('#btn-delete-submit').click(function (e) {
+            $.ajax({
+                type: 'GET',
+                url: '/Admin/BANANs/DeleteSubmit',
+                data: { CatId: id },
+                success: function (response) {
+
+                }
+            });
+        });
+
+        //function loadBANANsById(int Makg) {
+        //    $.ajax({
+        //        type: 'GET',
+        //        url: '/Admin/BANANs/LoadBANANsById',
+        //        data: { CatId: Makg },
+        //        success: function (response) {
+        //            // Đưa kết quả vào một phần tử trên trang
+        //            $('#result').html(response);
+        //        }
+        //    });
+        //}
+
+    });
+
+
+
+</script>

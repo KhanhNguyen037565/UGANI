@@ -1,0 +1,165 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div>
+        <div class="d-flex flex-row gap-2">
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="card border-left-primary shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                    Tổng đơn hàng
+                                </div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">@ViewBag.SumBills</div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Earnings (Monthly) Card Example -->
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="card border-left-success shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                    Tổng món ăn
+                                </div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">@ViewBag.SumFoods</div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="card border-left-info shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                                    Tổng truy cập
+                                </div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">@ViewBag.PageView</div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-comments fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pending Requests Card Example -->
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="card border-left-warning shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                    Đang online
+                                </div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">@ViewBag.Online</div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-comments fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <h3 class="m-2 text-center">Thống Kê Doanh Thu</h3>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="d-flex flex-row gap-4">
+                <span class="my-auto">Năm</span>
+                <select id="ddlYear" class="form-control" style="width:120px;">
+                    <option value="0">Chọn năm</option>
+                    @foreach (var item in ViewBag.ListYears)
+                    {
+                        <option value="@item">@item</option>
+                    }
+                </select>
+                <span class="my-auto">Tháng</span>
+                <select id="ddlMonth" class="form-control" style="width:140px;">
+                    <option value="0">Chọn tháng</option>
+                    @for (int i = 1; i < 13; i++)
+                    {
+                        <option value="@i">@i</option>
+                    }
+                </select>
+            </div>
+            <div>
+
+            </div>
+            <canvas id="canvas"></canvas>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script src="~/Scripts/chart/Chart.min.js"></script>
+
+    <script>
+
+        $('#ddlYear, #ddlMonth').on('change', function () {
+            var year = $('#ddlYear').val();
+            var month = $('#ddlMonth').val();
+
+            // Kiểm tra xem cả hai giá trị đã được chọn
+            if (year != 0 && month != 0) {
+                // Thực hiện yêu cầu $.get
+                $.get('/SystemManagement/GetResultReport?year=' + year + '&month=' + month, function (resp) {
+                    ResgisterChart(resp);
+                });
+            }
+        });
+
+
+
+
+            function ResgisterChart(lsData) {
+                var lsLabel = [];
+                var lsDataSource = [];
+                $.each(lsData, function (index, item) {
+                    lsLabel.push(item.Ngay)
+                    lsDataSource.push(item.TongTien);
+                });
+                console.log(lsLabel);
+                console.log(lsDataSource);
+
+                var ctx = document.getElementById("canvas");
+
+                var barChartData = {
+                    labels:lsLabel,
+                    datasets: [{
+                        labels: 'Dataset 1',
+                        backgroundColor: "rgb(15,158,162)",
+                        //borderColor: window.chartColors.red,
+                        borderWidth: 1,
+                        data: lsDataSource
+                    }]
+                };
+
+                var myBarChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: barChartData,
+                    //options: options
+                });
+            }
+
+    </script>
+}
+

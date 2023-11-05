@@ -1,0 +1,36 @@
+﻿@using Microsoft.AspNet.Identity
+@if (Request.IsAuthenticated)
+{
+    using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+    {
+        @Html.AntiForgeryToken()
+
+        <ul class="nav navbar-nav navbar-right">
+            <li>
+                <p class="d-inline-flex gap-1">
+                    <a class="text-decoration-none" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+                        Chào @User.Identity.GetUserName()!
+                    </a>
+                </p>
+                <div class="collapse w-50" id="collapseExample">
+                    <div class="card card-body">
+                        <ul class="list-unstyled">
+                            <li>@Html.ActionLink("Tài khoản", "Index", "Manage", routeValues: null, htmlAttributes: new { @class = "login-name", title = "Manage" })</li>
+                            <li>@Html.ActionLink("Hóa đơn", "ListBill", "Home", routeValues: null, htmlAttributes: new { @class = "login-name", title = "Bill" })</li>
+                        </ul>
+                    </div>
+                </div>
+                
+            </li>
+            <li><a class="loginLogout" href="javascript:document.getElementById('logoutForm').submit()">Đăng xuất</a></li>
+        </ul>
+    }
+}
+else
+{
+
+    <ul class="nav navbar-nav navbar-right">
+        <li>@Html.ActionLink("Đăng ký", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>
+        <li>@Html.ActionLink("Đăng nhập", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
+    </ul>
+}
